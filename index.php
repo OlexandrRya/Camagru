@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Camagru - General page</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-</head>
-<body>
-	<?php include 'header.php';  ?>
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
-</body>
-</html>
+define('ROOT', dirname(__FILE__));
+require_once(ROOT.'/components/Router.php');
+
+$router = new Router();
+
+$router->run();
