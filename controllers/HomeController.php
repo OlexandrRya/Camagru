@@ -2,9 +2,10 @@
 
 class HomeController
 {
-    public function actionIndex ()
+    public function actionIndex ($param1)
     {
-        echo 'HomeController actionIndex';
+        echo 'HomeController actionIndex'.'<br>';
+
         return true;
     }
 }

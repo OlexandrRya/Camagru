@@ -4,6 +4,6 @@
  */
 return array(
     'login' => 'user/login',
+    'sign-up' => 'user/signUp',
     'home' => 'home/index',
-    'sign-up' => 'user/signUp'
 );
