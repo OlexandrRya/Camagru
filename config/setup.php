@@ -1,11 +1,15 @@
 <?php
-include 'database.php';
+
+include_once ROOT.'/components/Db.php';
 
 // CREATE DATABASE
 try {
-	$sql = "CREATE DATABASE `".$DB_NAME."`";
+    $paramsPath = ROOT."/config/db_params.php";
+    $params = include($paramsPath);
+
+	$sql = "CREATE DATABASE `".$params['dbname']."`";
 	
-	$db = new PDO($DB_DSN_LIGHT, $DB_USER, $DB_PASSWORD);
+	$db = Db::getConnection();
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->exec($sql);
 	echo "Database created successfully\n";
