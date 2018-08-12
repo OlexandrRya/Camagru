@@ -2,10 +2,12 @@
 
 class HomeController
 {
-    public function actionIndex ($param1)
+    public function actionIndex ()
     {
-        echo 'HomeController actionIndex'.'<br>';
 
+
+
+        require_once(ROOT.'/view/general.blade.php');
         return true;
     }
 }
