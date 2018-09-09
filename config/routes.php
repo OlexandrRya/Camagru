@@ -3,8 +3,11 @@
  * @return routes
  */
 return array(
-    '' => 'home/index',
-    'login' => 'user/login',
+    'setup' => 'setup/setup',
+    'login/post' => 'user/login',
+    'login' => 'user/getLogin',
+    'sign-up/create' => 'user/createUser',
     'sign-up' => 'user/signUp',
     'home' => 'home/index',
+    '' => 'home/index',
 );

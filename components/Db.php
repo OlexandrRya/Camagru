@@ -13,4 +13,16 @@ class Db
 
         return $db;
     }
+
+    public static function getConnectionIfExistDb()
+    {
+        $paramsPath = ROOT."/config/db_params.php";
+        $params = include($paramsPath);
+        var_dump($params);
+        $dsn = "mysql:host=localhost";
+        $db = new PDO('mysql:host=localhost', $params['user'], $params['password']);
+
+        return $db;
+    }
+
 }

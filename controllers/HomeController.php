@@ -4,10 +4,9 @@ class HomeController
 {
     public function actionIndex ()
     {
-
-
-
-        require_once(ROOT.'/view/general.blade.php');
+phpinfo();
+//        $contentPathBlade = "";
+//        require_once(ROOT.'/view/general.blade.php');
         return true;
     }
 }
