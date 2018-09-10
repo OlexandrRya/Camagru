@@ -2,7 +2,7 @@
 
 return array(
     'host' => 'localhost',
-    'dbname' => 'сamagru',
+    'dbname' => 'camagru',
     'user' => 'root',
     'password' => '12345'
 );

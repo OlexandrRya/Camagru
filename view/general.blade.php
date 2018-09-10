@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-<?php include 'header.blade.php';  ?>
-<?php include "$contentPathBlade"?>
+    <?php include 'header.blade.php';  ?>
+    <?php include "$contentPathBlade"?>
 </body>
 </html>
