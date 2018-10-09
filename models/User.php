@@ -16,11 +16,17 @@ class User
         ";
         $sth = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array(':email' => $email));
-        $user = $sth->fetchAll();
-        var_dump($user[0]['email']);
-        die();
-        $verify = password_verify($password, $user->password);
-
-
+        $users = $sth->fetchAll();
+        $user = array_shift($users);
+        $passwordHash = $user['password'];
+        if ($this->verifyPass($password, $passwordHash)) {
+            $this->name = $user['user_name'];
+            $this->email = $user['email'];
+            $this->isAdmin = $user['is_admin'];
+        }
+    }
+    private function verifyPass($password, $passwordHash)
+    {
+        return password_verify($password, $passwordHash);
     }
 }

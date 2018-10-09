@@ -16,7 +16,12 @@ class UserController
         echo "login";
         $user = new User;
         $user->login($_POST['email'], $_POST['password']);
-        session_start();
+        var_dump($user);
+        if ($user->email != NULL) {
+            session_start();
+            $_SESSION['user'] = $user;
+        }
+        header("Location: /");
         return true;
     }
 
