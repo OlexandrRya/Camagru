@@ -14,6 +14,9 @@ class UserController
     public function actionLogin()
     {
         echo "login";
+        $user = new User;
+        $user->login($_POST['email'], $_POST['password']);
+        session_start();
         return true;
     }
 
