@@ -3,6 +3,9 @@
         <h1>Sign Up</h1>
         <p>Enter name, email and password to login.</p>
         <hr>
+        <?php if (isset($error)): ?>
+            <p class="error-text"><?php echo $error ?></p>
+        <?php endif; ?>
         <label><b>Name</b></label>
         <input type="text" placeholder="Enter Name" name="name" required>
 
