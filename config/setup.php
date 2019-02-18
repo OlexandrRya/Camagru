@@ -1,6 +1,6 @@
 <?php
 
-include_once ROOT.'/components/Db.php';
+include_once ROOT . '/Components/Db.php';
 
 // CREATE DATABASE
 try {

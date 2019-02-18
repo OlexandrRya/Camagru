@@ -1,4 +1,5 @@
 <?php
+namespace App\Components;
 
 class Router
 {
@@ -6,7 +7,7 @@ class Router
 
     public function __construct()
     {
-        $routesPath = ROOT.'/config/routes.php';
+        $routesPath = ROOT . '/config/routes.php';
         $this->routes = include($routesPath);
     }
 
@@ -24,22 +25,23 @@ class Router
     {
         $uri = $this->getURI();
 
+
         foreach ($this->routes as $uriPattern => $path){
+
 
             if (preg_match("~$uriPattern~", $uri)) {
 
                 $internalRoute = preg_replace("~$uriPattern~", $path, $uri);
-                $segments = explode('/', $internalRoute);
 
-                $controllerName = ucfirst(array_shift($segments)) . "Controller";
-                $actionName = 'action' . ucfirst(array_shift($segments));
+                $segments = explode('@', $internalRoute);
 
-                $controllerFileName = ROOT . '/controllers/' . $controllerName . '.php';
+                $controllerName = $segments[0];
 
-                if (file_exists($controllerFileName)) {
-                    include_once($controllerFileName);
-                }
+                $actionName = $segments[1];
 
+//                $controllerFileName = ROOT . '/Controllers/' . $controllerName . '.php';
+                $prefix = 'App\\Http\\Controllers\\';
+                $controllerName = $prefix . $controllerName;
                 $controllerObject = new $controllerName;
 
                 $parameters = $segments;

@@ -1,19 +1,21 @@
 <?php
 
-include_once ROOT.'/models/User.php';
+namespace App\Http\Controllers;
+
+use App\Models\User;
 
 class UserController
 {
-    public function actionGetLogin()
+    public function getLogin()
     {
         if (isset($_COOKIE['error']))
             $error = $_COOKIE['error'];
         $contentPathBlade = "login.blade.php";
-        require_once(ROOT.'/view/general.blade.php');
+        require_once(ROOT . '/view/general.blade.php');
         return true;
     }
 
-    public function actionLogin()
+    public function login()
     {
         $user = new User;
         $user->login($_POST['email'], $_POST['password']);
@@ -29,22 +31,22 @@ class UserController
         return true;
     }
 
-    public function actionLogout()
+    public function logout()
     {
         session_destroy();
         header("Location: /");
     }
 
-    public function actionSignUp()
+    public function signUp()
     {
         if (isset($_COOKIE['error']))
             $error = $_COOKIE['error'];
         $contentPathBlade = "signUp.blade.php";
-        require_once(ROOT.'/view/general.blade.php');
+        require_once(ROOT . '/view/general.blade.php');
         return true;
     }
 
-    public function actionCreateUser()
+    public function createUser()
     {
         $user = new User;
         $user->register($_POST);
