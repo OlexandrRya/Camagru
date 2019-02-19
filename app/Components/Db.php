@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Components;
+
+use PDO;
+
 class Db
 {
     public static function getConnection()

@@ -1,6 +1,6 @@
 <form class="mr-top-m" action="/login/post" method="POST" style="border:1px solid #ccc">
     <div class="container">
-        <h1>Sign Up</h1>
+        <h1>Login</h1>
         <p>Please fill in this form to login.</p>
         <hr>
         <?php if (isset($error)): ?>

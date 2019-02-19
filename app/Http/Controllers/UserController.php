@@ -39,8 +39,8 @@ class UserController
 
     public function signUp()
     {
-        if (isset($_COOKIE['error']))
-            $error = $_COOKIE['error'];
+        if (isset($_COOKIE['errors']))
+            $errors = json_decode($_COOKIE['errors']);
         $contentPathBlade = "signUp.blade.php";
         require_once(ROOT . '/view/general.blade.php');
         return true;
@@ -48,16 +48,27 @@ class UserController
 
     public function createUser()
     {
-        $user = new User;
-        $user->register($_POST);
+        $errors = [];
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $repeatPassword = $_POST['repeat_password'];
 
-        if ($user->email != NULL) {
+        $errors[] = User::emailVerification($email);
+        $errors[] = User::passwordVerification($password, $repeatPassword);
+        $errors = array_filter($errors);
+
+        if (count($errors) == 0){
+            $user = new User;
+            $user->register($email, $name, $password);
+
             $_SESSION['user'] = json_encode($user);
             header("Location: /");
             return true;
+        } else {
+            setcookie("errors", json_encode($errors));
         }
-        $error = 'This email is already taken!';
-        setcookie("error", $error, time() + 1);
+
         header("Location: /sign-up");
         return true;
     }

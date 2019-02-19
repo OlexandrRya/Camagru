@@ -1,6 +1,8 @@
 <?php
+namespace Config;
 
-include_once ROOT . '/Components/Db.php';
+use App\Components\Db;
+use PDOException;
 
 // CREATE DATABASE
 try {
@@ -21,6 +23,7 @@ try {
 		user_name VARCHAR(254) NOT NULL,
 		password VARCHAR(254) NOT NULL,
 		email VARCHAR(254),
+		is_verified BOOLEAN NOT NULL DEFAULT FALSE,
 		is_admin BOOLEAN NOT NULL DEFAULT FALSE
 	)";
     $db->exec($sql);
@@ -32,6 +35,7 @@ try {
           `user_name`,
           `password`,
           `email`,
+          `is_verified`,
           `is_admin`
         )
         VALUES
@@ -40,6 +44,7 @@ try {
           'admin',
           '" . password_hash("12345", PASSWORD_DEFAULT) ."',
           'admin@admin.com',
+          '1',
           '1'
         );
     ";
@@ -47,6 +52,7 @@ try {
 
 
     echo "Database created successfully\n";
+    header('Location: /');
 } catch (PDOException $e) {
 	echo "EROOR creating DATABASE: \n".$e->getMessage()."\nAborting process\n";
 	exit (-1);
