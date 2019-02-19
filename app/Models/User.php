@@ -74,7 +74,6 @@ class User
     {
         $this->createUser($email, $name, $password);
         $this->login($email, $password);
-
     }
 
     private function verifyPass($password, $passwordHash)
@@ -95,6 +94,31 @@ class User
         $users = $sth->fetchAll();
         $user = array_shift($users);
         return $user;
+    }
+
+    public static function emailAndPasswordVerification($email, $password)
+    {
+        $error = NULL;
+        $db = Db::getConnection();
+        $sql = "
+            SELECT password, is_verified
+            FROM `users` 
+            WHERE email = :email;
+        ";
+        $sth = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array(':email' => $email));
+        $users = $sth->fetchAll();
+        $user = array_shift($users);
+
+        if (!$user) {
+            $error = 'Invalid email';
+        }
+        else if (!password_verify($password, $user['password'])) {
+            $error = 'Invalid password';
+        } else if ($user['is_verified'] == 0) {
+            $error = 'You need to confirm your email.';
+        }
+        return $error;
     }
 
     public static function emailVerification($email) {
