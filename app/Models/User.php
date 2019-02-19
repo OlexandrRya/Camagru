@@ -131,7 +131,7 @@ class User
         return $error;
     }
 
-    public static function passwordVerification ($password, $repeatedPassword) {
+    public static function passwordVerification($password, $repeatedPassword) {
         $error = '';
         $passwordLen = strlen($password);
         $repeatedPassLen = strlen($repeatedPassword);
