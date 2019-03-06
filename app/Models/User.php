@@ -52,7 +52,7 @@ class User
               `user_name`, 
               `password`, 
               `email`
-            ) 
+            )
             VALUES 
             (
               :name, 

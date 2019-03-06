@@ -18,6 +18,9 @@ try {
 
     $db = Db::getConnection();
 
+    /**
+     * Create users table
+     */
     $sql = "CREATE TABLE users (
 		id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 		user_name VARCHAR(254) NOT NULL,
@@ -28,6 +31,18 @@ try {
 	)";
     $db->exec($sql);
 
+    $sql = "CREATE TABLE verifications (
+		id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		user_id INT(11) NOT NULL,
+		verification_code VARCHAR(254) NOT NULL,
+		verified_at TIMESTAMP NULL DEFAULT NULL,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	)";
+    $db->exec($sql);
+
+    /**
+     * Insert admin user to database.
+     */
     $sql = "
         INSERT INTO `users` 
         (

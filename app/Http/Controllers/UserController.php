@@ -16,11 +16,10 @@ class UserController
 
     public function getLogin()
     {
-        if (isset($_COOKIE['errors']))
+        if (isset($_COOKIE['errors'])){
             $errors = json_decode($_COOKIE['errors'], true);
+        }
 
-//        var_dump($errors);
-//        die();
         $contentPathBlade = "login.blade.php";
         require_once(ROOT . '/view/general.blade.php');
         return true;
