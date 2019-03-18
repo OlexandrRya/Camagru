@@ -34,17 +34,16 @@ class UserController
     public function login()
     {
         $errors = [];
-        $email = $_POST['email'];
+        $userName = $_POST['user_name'];
         $password = $_POST['password'];
 
-        $errors['emailAndPassword'] = User::emailAndPasswordVerification($email, $password);
+        $errors['userNameAndPassword'] = User::userNameAndPasswordVerification($userName, $password);
         $errors = array_filter($errors);
 
         if (count($errors) == 0) {
 
             $user = new User;
-            $user->login($_POST['email'], $_POST['password']);
-
+            $user->login($_POST['user_name'], $_POST['password']);
 
             $_SESSION['user'] = json_encode($user);
             header("Location: /");
@@ -75,21 +74,22 @@ class UserController
     public function createUser()
     {
         $errors = [];
-        $name = $_POST['name'];
+        $userName = $_POST['name'];
         $email = $_POST['email'];
         $password = $_POST['password'];
         $repeatPassword = $_POST['repeat_password'];
 
+        $errors['userName'] = User::userNameVerification($userName);
         $errors['email'] = User::emailVerification($email);
         $errors['password'] = User::passwordVerification($password, $repeatPassword);
         $errors = array_filter($errors);
 
         if (count($errors) == 0){
             $user = new User;
-            $user->register($email, $name, $password);
+            $user->register($email, $userName, $password);
 
             $this->sessionRepository->setArrayToSessionInJsonForm('user', $user);
-            $this->verificationCodeRepository->createConfirmCodeAndSenConfirmEmailToUser($user);
+            $this->verificationCodeRepository->createConfirmCodeAndSentConfirmEmailToUser($user);
 
             header("Location: /success-register");
             return true;
@@ -112,6 +112,13 @@ class UserController
         }
 
         header("Location: /login");
+        return true;
+    }
+
+    public function settingShow()
+    {
+        $contentPathBlade = "userSettings.blade.php";
+        require_once(ROOT . '/view/general.blade.php');
         return true;
     }
 

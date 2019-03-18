@@ -22,7 +22,7 @@ class VerificationCodeRepository
         return $userId;
     }
 
-    public function createConfirmCodeAndSenConfirmEmailToUser(User $user)
+    public function createConfirmCodeAndSentConfirmEmailToUser(User $user)
     {
         $confirmCode = $this->verificationCodeModel->createVerificationCodeToUser($user->getUserId());
 

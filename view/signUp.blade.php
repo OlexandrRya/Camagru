@@ -4,6 +4,9 @@
         <p>Enter name, email and password to login.</p>
         <hr>
 
+        <?php if (isset($errors['userName'])): ?>
+        <p class="error-text"><?php echo $errors['userName'] ?></p>
+        <?php endif; ?>
         <label><b>Name</b></label>
         <input type="text" placeholder="Enter Name" name="name" required>
 

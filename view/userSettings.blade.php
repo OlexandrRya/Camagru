@@ -3,11 +3,11 @@
         <h1>Login</h1>
         <p>Please fill in this form to login.</p>
         <hr>
-        <?php if (isset($errors['userNameAndPassword'])): ?>
-            <p class="error-text"><?php echo $errors['userNameAndPassword'] ?></p>
+        <?php if (isset($errors['emailAndPassword'])): ?>
+        <p class="error-text"><?php echo $errors['emailAndPassword'] ?></p>
         <?php endif; ?>
-        <label for="email"><b>User name</b></label>
-        <input type="text" placeholder="Enter user name" name="user_name" required>
+        <label for="email"><b>Email</b></label>
+        <input type="text" placeholder="Enter Email" name="email" required>
 
         <label for="psw"><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="password" required>

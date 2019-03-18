@@ -18,9 +18,9 @@ class User
         $this->db = Db::getConnection();
     }
 
-    public function login($email, $password)
+    public function login($userName, $password)
     {
-        $user = $this->getUserFromEmail($email);
+        $user = $this->getUserFromUserName($userName);
         $passwordHash = $user['password'];
 
         if ($this->verifyPass($password, $passwordHash)) {
@@ -28,6 +28,34 @@ class User
             $this->email = $user['email'];
             $this->isAdmin = $user['is_admin'];
         }
+    }
+
+    private function getUserFromUserName($userName)
+    {
+        $sql = "
+            SELECT email, user_name, is_admin, password 
+            FROM `users` 
+            WHERE user_name = :userName;
+        ";
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array(':userName' => $userName));
+        $users = $sth->fetchAll();
+        $user = array_shift($users);
+        return $user;
+    }
+
+    private function getUserFromEmail($email)
+    {
+        $sql = "
+            SELECT email, user_name, is_admin, password 
+            FROM `users` 
+            WHERE email = :email;
+        ";
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array(':email' => $email));
+        $users = $sth->fetchAll();
+        $user = array_shift($users);
+        return $user;
     }
 
     public function getUserId()
@@ -43,20 +71,6 @@ class User
         $user = array_shift($users);
 
         return isset($user['id']) ? $user['id'] : NULL;
-    }
-
-    private function getUserFromEmail($email)
-    {
-        $sql = "
-            SELECT email, user_name, is_admin, password 
-            FROM `users` 
-            WHERE email = :email;
-        ";
-        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->execute(array(':email' => $email));
-        $users = $sth->fetchAll();
-        $user = array_shift($users);
-        return $user;
     }
 
     private function createUser($email, $name, $password)
@@ -106,17 +120,33 @@ class User
     public function register($email, $name, $password)
     {
         $user = $this->getUserFromEmail($email);
+
         if (!isset($user)) {
             $this->createUser($email, $name, $password);
         } else {
             $this->updateUser($email, $name, $password);
         }
-        $this->login($email, $password);
+        $this->login($name, $password);
     }
 
     private function verifyPass($password, $passwordHash)
     {
         return password_verify($password, $passwordHash);
+    }
+
+    public static function getUserInfoByUserName($userName)
+    {
+        $db = Db::getConnection();
+        $sql = "
+            SELECT email, user_name, is_admin, is_verified
+            FROM `users` 
+            WHERE user_name = :userName;
+        ";
+        $sth = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array(':userName' => $userName));
+        $users = $sth->fetchAll();
+        $user = array_shift($users);
+        return $user;
     }
 
     public static function getUserInfoByEmail($email)
@@ -134,22 +164,40 @@ class User
         return $user;
     }
 
-    public static function emailAndPasswordVerification($email, $password)
+    static public function userNameVerification($userName)
+    {
+        $user = User::getUserInfoByUserName($userName);
+        $error = '';
+
+        $userNameLen = strlen($userName);
+        if ($userNameLen < 3) {
+            $error = 'User name too short (min 3 symbols).';
+        } else if ($userNameLen > 15) {
+            $error = 'User name too long (max 15 symbols).';
+        } else if (!preg_match('/^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$/', $userName)) {
+            $error = 'User name contains forbidden symbols.';
+        } else if (isset($user) && $user['is_verified'] == 1) {
+            $error = "This user name has already registered.";
+        }
+        return $error;
+    }
+
+    public static function userNameAndPasswordVerification($userName, $password)
     {
         $error = NULL;
         $db = Db::getConnection();
         $sql = "
             SELECT password, is_verified
             FROM `users` 
-            WHERE email = :email AND is_verified = 1;
+            WHERE user_name = :userName AND is_verified = 1;
         ";
         $sth = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->execute(array(':email' => $email));
+        $sth->execute(array(':userName' => $userName));
         $users = $sth->fetchAll();
         $user = array_shift($users);
 
         if (!$user) {
-            $error = 'Invalid email';
+            $error = 'Invalid user name';
         }
         else if (!password_verify($password, $user['password'])) {
             $error = 'Invalid password';

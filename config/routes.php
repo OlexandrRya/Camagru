@@ -12,6 +12,6 @@
         'home' => 'HomeController@index',
         'success-register' => 'UserController@successRegister',
         'confirm' => 'UserController@confirmUser',
-
+        'settings' => 'UserController@settingShow',
         '' => 'HomeController@index'
     );
