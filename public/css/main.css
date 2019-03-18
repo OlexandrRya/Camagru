@@ -3,6 +3,12 @@
 .mr-top-m {
     margin-top: 30px;
 }
+.mr-top-l {
+    margin-top: 40px;
+}
+.text-center {
+    text-align: center;
+}
 .header-p {
     padding: 0!important;
     margin: 12px 5px 0 5px!important;

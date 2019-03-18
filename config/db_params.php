@@ -3,6 +3,6 @@
 return array(
     'host' => 'localhost',
     'dbname' => 'camagru',
-    'user' => 'username',
-    'password' => 'password'
+    'user' => 'root',
+    'password' => '12345'
 );

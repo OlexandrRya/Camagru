@@ -4,14 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Repositories\SessionRepository;
+use App\Repositories\UserRepository;
+use App\Repositories\VerificationCodeRepository;
 
 class UserController
 {
     private $sessionRepository;
+    private $verificationCodeRepository;
+    private $userRepository;
 
     public function __construct()
     {
         $this->sessionRepository = new SessionRepository;
+        $this->verificationCodeRepository = new VerificationCodeRepository();
+        $this->userRepository = new UserRepository();
     }
 
     public function getLogin()
@@ -83,13 +89,36 @@ class UserController
             $user->register($email, $name, $password);
 
             $this->sessionRepository->setArrayToSessionInJsonForm('user', $user);
-            header("Location: /");
+            $this->verificationCodeRepository->createConfirmCodeAndSenConfirmEmailToUser($user);
+
+            header("Location: /success-register");
             return true;
         } else {
             setcookie("errors", json_encode($errors), time() + 1);
         }
 
         header("Location: /sign-up");
+        return true;
+    }
+
+    public function confirmUser()
+    {
+        $errors = [];
+        $confirmCode = $_GET['confirmCode'];
+
+        $userId = $this->verificationCodeRepository->confirmCodeAndReturnUserId($confirmCode);
+        if (isset($userId)) {
+            $this->userRepository->confirmUser($userId);
+        }
+
+        header("Location: /login");
+        return true;
+    }
+
+    public function successRegister()
+    {
+        $contentPathBlade = "signUpSuccess.blade.php";
+        require_once(ROOT . '/view/general.blade.php');
         return true;
     }
 }

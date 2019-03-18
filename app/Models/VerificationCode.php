@@ -20,6 +20,7 @@ class VerificationCode
         if (isset($userId)) {
             $this->setDateToVerification($verificationCode);
         }
+        return $userId;
     }
 
     private function setDateToVerification($verificationCode)
@@ -61,12 +62,12 @@ class VerificationCode
             INSERT INTO `verifications` 
             (
                 user_id,
-                verification_code,
+                verification_code
             ) 
             VALUES 
             (
               :userId, 
-              :verificationCode, 
+              :verificationCode
             )
         ";
         $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));

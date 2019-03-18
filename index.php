@@ -6,6 +6,7 @@ define('ROOT', dirname(__FILE__));
 session_start();
 
 require_once ROOT . '/vendor/autoload.php';
+require_once ROOT . '/vendor/globalFunction.php';
 
 use App\Components\Router;
 //require_once(ROOT . '/Components/Router.php');

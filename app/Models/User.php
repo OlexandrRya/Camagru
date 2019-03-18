@@ -30,6 +30,21 @@ class User
         }
     }
 
+    public function getUserId()
+    {
+        $sql = "
+            SELECT id 
+            FROM `users` 
+            WHERE email = :email;
+        ";
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array(':email' => $this->email));
+        $users = $sth->fetchAll();
+        $user = array_shift($users);
+
+        return isset($user['id']) ? $user['id'] : NULL;
+    }
+
     private function getUserFromEmail($email)
     {
         $sql = "
@@ -70,9 +85,32 @@ class User
         );
     }
 
+    private function updateUser($email, $name, $password)
+    {
+        $sql = "
+            UPDATE `users` 
+            SET user_name = :name, password = :passwordHash
+            WHERE email = :email;
+        ";
+
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(
+            array(
+                ':name' => $name,
+                ':passwordHash' => password_hash($password, PASSWORD_DEFAULT),
+                ':email' => $email
+            )
+        );
+    }
+
     public function register($email, $name, $password)
     {
-        $this->createUser($email, $name, $password);
+        $user = $this->getUserFromEmail($email);
+        if (!isset($user)) {
+            $this->createUser($email, $name, $password);
+        } else {
+            $this->updateUser($email, $name, $password);
+        }
         $this->login($email, $password);
     }
 
@@ -85,7 +123,7 @@ class User
     {
         $db = Db::getConnection();
         $sql = "
-            SELECT email, user_name, is_admin 
+            SELECT email, user_name, is_admin, is_verified
             FROM `users` 
             WHERE email = :email;
         ";
@@ -103,7 +141,7 @@ class User
         $sql = "
             SELECT password, is_verified
             FROM `users` 
-            WHERE email = :email;
+            WHERE email = :email AND is_verified = 1;
         ";
         $sth = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array(':email' => $email));
@@ -123,9 +161,10 @@ class User
 
     public static function emailVerification($email) {
         $error = '';
+        $user = User::getUserInfoByEmail($email);
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error = "Email isn't valid.";
-        } else if (User::getUserInfoByEmail($email)) {
+        } else if (isset($user) && $user['is_verified'] == 1) {
             $error = "Email has already registered.";
         }
         return $error;
@@ -144,5 +183,16 @@ class User
             $error = 'Too simple password  (should contain at least one uppercase and lowercase letter and a number).';
         }
         return $error;
+    }
+
+    public function confirmUser($userId)
+    {
+        $sql = "
+            UPDATE users 
+                SET `is_verified` = TRUE
+            WHERE id = :userId AND is_verified IS FALSE;
+        ";
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array(':userId' => $userId));
     }
 }

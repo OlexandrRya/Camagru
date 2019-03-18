@@ -13,7 +13,7 @@
         <input type="password" placeholder="Enter Password" name="password" required>
 
         <div class="clearfix">
-            <button type="submit" class="signupbtn">Sign Up</button>
+            <button type="submit" class="signupbtn">Login</button>
         </div>
     </div>
 </form>

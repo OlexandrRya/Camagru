@@ -14,7 +14,7 @@
         <input type="text" placeholder="Enter Email" name="email" required>
 
         <?php if (isset($errors['password'])): ?>
-            <p class="error-text"><?php echo $errors['email'] ?></p>
+            <p class="error-text"><?php echo $errors['password'] ?></p>
         <?php endif; ?>
         <label for="psw"><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="password" required>

@@ -8,6 +8,6 @@
 </head>
 <body>
 <?php include 'header.blade.php';  ?>
-<h1>4004 Error</h1>
+<h1>404 Error</h1>
 </body>
 </html>
