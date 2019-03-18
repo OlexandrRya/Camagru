@@ -4,14 +4,18 @@
      */
     return array(
         'setup' => 'SetupController@setup',
-        'login/post' => 'UserController@login',
-        'login' => 'UserController@getLogin',
-        'logout' => 'UserController@logout',
-        'sign-up/create' => 'UserController@createUser',
-        'sign-up' => 'UserController@signUp',
-        'home' => 'HomeController@index',
-        'success-register' => 'UserController@successRegister',
-        'confirm' => 'UserController@confirmUser',
+        'login/post' => 'AuthController@login',
+        'login' => 'AuthController@getLogin',
+        'logout' => 'AuthController@logout',
+
+        'sign-up/create' => 'AuthController@createUser',
+        'sign-up' => 'AuthController@signUp',
+        'confirm' => 'AuthController@confirmUser',
+        'success-register' => 'AuthController@successRegister',
+
+        'settings/change/user-name' => 'UserController@changeUserName',
         'settings' => 'UserController@settingShow',
+
+        'home' => 'HomeController@index',
         '' => 'HomeController@index'
     );

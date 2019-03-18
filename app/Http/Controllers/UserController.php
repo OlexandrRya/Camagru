@@ -15,117 +15,50 @@ class UserController
 
     public function __construct()
     {
+        if (auth() == NULL) {
+            header("Location: /login");
+            return false;
+        }
         $this->sessionRepository = new SessionRepository;
         $this->verificationCodeRepository = new VerificationCodeRepository();
         $this->userRepository = new UserRepository();
     }
 
-    public function getLogin()
-    {
-        if (isset($_COOKIE['errors'])){
-            $errors = json_decode($_COOKIE['errors'], true);
-        }
-
-        $contentPathBlade = "login.blade.php";
-        require_once(ROOT . '/view/general.blade.php');
-        return true;
-    }
-
-    public function login()
-    {
-        $errors = [];
-        $userName = $_POST['user_name'];
-        $password = $_POST['password'];
-
-        $errors['userNameAndPassword'] = User::userNameAndPasswordVerification($userName, $password);
-        $errors = array_filter($errors);
-
-        if (count($errors) == 0) {
-
-            $user = new User;
-            $user->login($_POST['user_name'], $_POST['password']);
-
-            $_SESSION['user'] = json_encode($user);
-            header("Location: /");
-            return true;
-        } else {
-            setcookie("errors", json_encode($errors), time() + 1);
-            header("Location: /login");
-        }
-        return true;
-    }
-
-    public function logout()
-    {
-        $this->sessionRepository->sessionDestroy();
-        header("Location: /");
-    }
-
-    public function signUp()
-    {
-        if (isset($_COOKIE['errors']))
-            $errors = json_decode($_COOKIE['errors'], true);
-
-        $contentPathBlade = "signUp.blade.php";
-        require_once(ROOT . '/view/general.blade.php');
-        return true;
-    }
-
-    public function createUser()
-    {
-        $errors = [];
-        $userName = $_POST['name'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-        $repeatPassword = $_POST['repeat_password'];
-
-        $errors['userName'] = User::userNameVerification($userName);
-        $errors['email'] = User::emailVerification($email);
-        $errors['password'] = User::passwordVerification($password, $repeatPassword);
-        $errors = array_filter($errors);
-
-        if (count($errors) == 0){
-            $user = new User;
-            $user->register($email, $userName, $password);
-
-            $this->sessionRepository->setArrayToSessionInJsonForm('user', $user);
-            $this->verificationCodeRepository->createConfirmCodeAndSentConfirmEmailToUser($user);
-
-            header("Location: /success-register");
-            return true;
-        } else {
-            setcookie("errors", json_encode($errors), time() + 1);
-        }
-
-        header("Location: /sign-up");
-        return true;
-    }
-
-    public function confirmUser()
-    {
-        $errors = [];
-        $confirmCode = $_GET['confirmCode'];
-
-        $userId = $this->verificationCodeRepository->confirmCodeAndReturnUserId($confirmCode);
-        if (isset($userId)) {
-            $this->userRepository->confirmUser($userId);
-        }
-
-        header("Location: /login");
-        return true;
-    }
-
     public function settingShow()
     {
+        $errors = $this->sessionRepository->getErrorMessagesInArray();
+
         $contentPathBlade = "userSettings.blade.php";
         require_once(ROOT . '/view/general.blade.php');
         return true;
     }
 
-    public function successRegister()
+    public function changeUserName()
     {
-        $contentPathBlade = "signUpSuccess.blade.php";
-        require_once(ROOT . '/view/general.blade.php');
+        $errors = [];
+        $newUserName = $_POST['new_user_name'];
+        $userName = auth()->name;
+        $errors['newUserName'] = User::userNameVerification($newUserName);
+        $errors = array_filter($errors);
+
+        if (count($errors) == 0) {
+            $user = new User;
+            $user->loginWithoutPassword($userName);
+            $user->changeUserName($newUserName);
+
+            $_SESSION['user'] = json_encode($user);
+            header("Location: /settings");
+            return true;
+        } else {
+            $this->sessionRepository->setErrorMessages($errors);
+            header("Location: /login");
+
+//            header("Location: /settings");
+            var_dump($errors);
+            var_dump($_COOKIE);
+
+            die;
+        }
         return true;
     }
 }

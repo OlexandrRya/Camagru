@@ -18,6 +18,33 @@ class User
         $this->db = Db::getConnection();
     }
 
+    public function changeUserName($newUserName)
+    {
+        $sql = "
+            UPDATE `users` 
+              SET user_name = :newUserName
+            WHERE user_name = :oldUserName;
+        ";
+
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(
+            array(
+                ':newUserName' => $newUserName,
+                ':oldUserName' => $this->name
+            )
+        );
+        $this->name = $newUserName;
+    }
+
+    public function loginWithoutPassword($userName)
+    {
+        $user = $this->getUserFromUserName($userName);
+
+        $this->name = $user['user_name'];
+        $this->email = $user['email'];
+        $this->isAdmin = $user['is_admin'];
+    }
+
     public function login($userName, $password)
     {
         $user = $this->getUserFromUserName($userName);

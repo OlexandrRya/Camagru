@@ -7,7 +7,7 @@ class SessionRepository
 
     public function __construct()
     {
-        $this->session = $_SESSION;
+        $this->session = &$_SESSION;
     }
 
     public function setArrayToSessionInJsonForm($name, $array)
@@ -27,5 +27,26 @@ class SessionRepository
     public  function sessionDestroy()
     {
         session_destroy();
+    }
+
+    public function setErrorMessages($errors)
+    {
+        $json = json_encode($errors);
+        $this->session['errors'] = $json;
+    }
+
+    public function getErrorMessagesInArray()
+    {
+        if (isset($this->session['errors'])) {
+            $errors = json_decode($this->session['errors'], true);
+            $this->unsetArrayInSession('errors');
+            return $errors;
+        }
+        return NULL;
+    }
+
+    private function unsetArrayInSession($nameArray)
+    {
+        unset($this->session[$nameArray]);
     }
 }
