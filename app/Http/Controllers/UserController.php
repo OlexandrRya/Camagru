@@ -43,7 +43,7 @@ class UserController
 
         if (count($errors) == 0) {
             $user = new User;
-            $user->loginWithoutPassword($userName);
+            $user->loginWithUserNameWithoutPassword($userName);
             $user->changeUserName($newUserName);
 
             $_SESSION['user'] = json_encode($user);
@@ -51,13 +51,59 @@ class UserController
             return true;
         } else {
             $this->sessionRepository->setErrorMessages($errors);
-            header("Location: /login");
+            header("Location: /settings");
+        }
+        return true;
+    }
 
-//            header("Location: /settings");
-            var_dump($errors);
-            var_dump($_COOKIE);
+    public function changeEmail()
+    {
+        $errors = [];
 
-            die;
+        $newEmail = $_POST['new_email'];
+        $email = auth()->email;
+        $errors['newEmail'] = User::emailVerification($newEmail);
+        $errors = array_filter($errors);
+
+        if (count($errors) == 0) {
+            $user = new User;
+            $user->loginWithEmailWithoutPassword($email);
+            $user->changeEmail($newEmail);
+
+            $_SESSION['user'] = json_encode($user);
+            header("Location: /settings");
+            return true;
+        } else {
+            $this->sessionRepository->setErrorMessages($errors);
+            header("Location: /settings");
+        }
+        return true;
+    }
+
+    public function changePassword()
+    {
+        $errors = [];
+
+        $oldPassword = $_POST['old_password'];
+        $newPassword = $_POST['new_password'];
+        $repeatNewPassword = $_POST['repeat_new_password'];
+
+        $errors['oldPassword'] = User::userNameAndPasswordVerification(auth()->name, $oldPassword);
+        $errors['newPassword'] = User::passwordVerification($newPassword, $repeatNewPassword);
+
+        $errors = array_filter($errors);
+
+        if (count($errors) == 0) {
+            $user = new User;
+            $user->loginWithEmailWithoutPassword(auth()->email);
+            $user->changePassword($newPassword);
+
+            $_SESSION['user'] = json_encode($user);
+            header("Location: /settings");
+            return true;
+        } else {
+            $this->sessionRepository->setErrorMessages($errors);
+            header("Location: /settings");
         }
         return true;
     }

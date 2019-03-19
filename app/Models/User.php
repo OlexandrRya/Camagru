@@ -18,6 +18,42 @@ class User
         $this->db = Db::getConnection();
     }
 
+    public function changePassword($newPassword)
+    {
+        $sql = "
+            UPDATE `users` 
+              SET password = :passwordHash
+            WHERE email = :email;
+        ";
+
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(
+            array(
+                ':email' => $this->email,
+                ':passwordHash' => password_hash($newPassword, PASSWORD_DEFAULT)
+
+            )
+        );
+    }
+
+    public function changeEmail($email)
+    {
+        $sql = "
+            UPDATE `users`
+              SET email = :newEmail
+            WHERE email = :oldEmail;
+        ";
+
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(
+            array(
+                ':newEmail' => $email,
+                ':oldEmail' => $this->email
+            )
+        );
+        $this->email = $email;
+    }
+
     public function changeUserName($newUserName)
     {
         $sql = "
@@ -36,7 +72,16 @@ class User
         $this->name = $newUserName;
     }
 
-    public function loginWithoutPassword($userName)
+    public function loginWithEmailWithoutPassword($email)
+    {
+        $user = $this->getUserFromEmail($email);
+
+        $this->name = $user['user_name'];
+        $this->email = $user['email'];
+        $this->isAdmin = $user['is_admin'];
+    }
+
+    public function loginWithUserNameWithoutPassword($userName)
     {
         $user = $this->getUserFromUserName($userName);
 

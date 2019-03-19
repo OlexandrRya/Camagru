@@ -13,6 +13,8 @@
         'confirm' => 'AuthController@confirmUser',
         'success-register' => 'AuthController@successRegister',
 
+        'settings/change/password' => 'UserController@changePassword',
+        'settings/change/email' => 'UserController@changeEmail',
         'settings/change/user-name' => 'UserController@changeUserName',
         'settings' => 'UserController@settingShow',
 

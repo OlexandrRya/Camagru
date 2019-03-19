@@ -103,7 +103,6 @@ class AuthController
         $errors['password'] = User::passwordVerification($password, $repeatPassword);
         $errors = array_filter($errors);
 
-
         if (count($errors) == 0){
             $user = new User;
             $user->register($email, $userName, $password);
