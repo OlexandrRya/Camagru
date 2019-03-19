@@ -9,5 +9,6 @@
 <body>
     <?php include 'header.blade.php';  ?>
     <?php isset($contentPathBlade) ? include "$contentPathBlade" : NULL?>
+    <?php include 'footer.blade.php';  ?>
 </body>
 </html>

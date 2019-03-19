@@ -31,7 +31,6 @@ class User
             array(
                 ':email' => $this->email,
                 ':passwordHash' => password_hash($newPassword, PASSWORD_DEFAULT)
-
             )
         );
     }
