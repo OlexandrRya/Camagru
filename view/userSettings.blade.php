@@ -52,7 +52,7 @@
         <p class="error-text"><?php echo $errors['newPassword'] ?></p>
         <?php endif; ?>
         <label for="psw"><b>New password</b></label>
-        <input type="text" placeholder="Enter new password" name="new_password" required>
+        <input type="password" placeholder="Enter new password" name="new_password" required>
 
         <label for="psw"><b>Repeat new Password</b></label>
         <input type="password" placeholder="Repeat new Password" name="repeat_new_password" required>
