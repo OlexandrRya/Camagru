@@ -18,6 +18,9 @@
         'settings/change/user-name' => 'UserController@changeUserName',
         'settings' => 'UserController@settingShow',
 
+        'photo/create/post' => 'PhotoController@photoCreatePost',
+        'photo/create/show' => 'PhotoController@photoShowCreatePage',
+
         'home' => 'HomeController@index',
         '' => 'HomeController@index'
     );

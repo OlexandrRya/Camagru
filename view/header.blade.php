@@ -4,6 +4,7 @@
             <a href="/" class="w3-bar-item w3-button w3-padding-large">Home</a>
             <?php if (auth()): ?>
                 <p class="w3-bar-item header-p">Hello, <?php echo auth()->name ?></p>
+                <a href="/photo/create/show" class="w3-bar-item w3-button w3-padding-large">Create photo</a>
                 <a href="/settings" class="w3-bar-item w3-button w3-padding-large">Profile Settings</a>
                 <a href="/logout" class="w3-bar-item w3-button w3-padding-large">Logout</a>
             <?php else:?>
