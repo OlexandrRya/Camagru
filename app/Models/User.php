@@ -7,6 +7,7 @@ use PDO;
 
 class User
 {
+    public $id = NULL;
     public $name = NULL;
     public $email = NULL;
     public $isAdmin = 0;
@@ -75,6 +76,7 @@ class User
     {
         $user = $this->getUserFromEmail($email);
 
+        $this->id = $user['id'];
         $this->name = $user['user_name'];
         $this->email = $user['email'];
         $this->isAdmin = $user['is_admin'];
@@ -84,6 +86,7 @@ class User
     {
         $user = $this->getUserFromUserName($userName);
 
+        $this->id = $user['id'];
         $this->name = $user['user_name'];
         $this->email = $user['email'];
         $this->isAdmin = $user['is_admin'];
@@ -95,6 +98,7 @@ class User
         $passwordHash = $user['password'];
 
         if ($this->verifyPass($password, $passwordHash)) {
+            $this->id = $user['id'];
             $this->name = $user['user_name'];
             $this->email = $user['email'];
             $this->isAdmin = $user['is_admin'];
@@ -104,7 +108,7 @@ class User
     private function getUserFromUserName($userName)
     {
         $sql = "
-            SELECT email, user_name, is_admin, password 
+            SELECT id, email, user_name, is_admin, password 
             FROM `users` 
             WHERE user_name = :userName;
         ";
@@ -118,7 +122,7 @@ class User
     private function getUserFromEmail($email)
     {
         $sql = "
-            SELECT email, user_name, is_admin, password 
+            SELECT id, email, user_name, is_admin, password 
             FROM `users` 
             WHERE email = :email;
         ";
@@ -209,7 +213,7 @@ class User
     {
         $db = Db::getConnection();
         $sql = "
-            SELECT email, user_name, is_admin, is_verified
+            SELECT id, email, user_name, is_admin, is_verified
             FROM `users` 
             WHERE user_name = :userName;
         ";
@@ -224,7 +228,7 @@ class User
     {
         $db = Db::getConnection();
         $sql = "
-            SELECT email, user_name, is_admin, is_verified
+            SELECT id, email, user_name, is_admin, is_verified
             FROM `users` 
             WHERE email = :email;
         ";
@@ -282,7 +286,7 @@ class User
         $error = '';
         $user = User::getUserInfoByEmail($email);
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error = "Email isn't valid.";
+            var_dump(filter_var($email, FILTER_VALIDATE_EMAIL));
         } else if (isset($user) && $user['is_verified'] == 1) {
             $error = "Email has already registered.";
         }

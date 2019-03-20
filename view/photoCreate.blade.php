@@ -1,8 +1,8 @@
-<div class="makephoto-wrapper mr-top-l">
+<div class="photo-div mr-top-l">
     <form action='#' method='POST' onsubmit='return false;'>
-        <div id='video-container'>
-            <video id='video'>Stream not available</video>
-            <div id='sticker'><img src="" alt=""></div>
+        <div id='video-div'>
+            <video id='stream'>Stream not available</video>
+            <div id='stick'><img src="" alt=""></div>
             <div class="photo-menu">
                 <input id='upload-file' type="file" name="pic" accept="image/*">
                 <input id='upload-submit' type="submit" value='Upload Photo'>
@@ -21,15 +21,15 @@
             <canvas id='canvas'></canvas>
         </div>
     </form>
-    <div class="stickers-wrapper">
-        <img class='sticker-img' src="/public/image/stickers/samuel.png" alt="samuel sticker">
-        <img class='sticker-img' src="/public/image/stickers/dog.png" alt="Dog sticker">
-        <img class='sticker-img' src="/public/image/stickers/cat.png" alt="Cat sticker">
-        <img class='sticker-img' src="/public/image/stickers/bruce.png" alt="Bruce Lee sticker">
-        <img class='sticker-img' src="/public/image/stickers/hercules.png" alt="Hercules sticker">
-        <img class='sticker-img' src="/public/image/stickers/ufo.png" alt="UFO sticker">
-        <img class='sticker-img' src="/public/image/stickers/elon.png" alt="Elon Musk sticker">
-        <img class='sticker-img' src="/public/image/stickers/will.png" alt="Will Smith sticker">
+    <div class="stick-div">
+        <img class='stick-img' src="/public/image/stickers/samuel.png" alt="samuel sticker">
+        <img class='stick-img' src="/public/image/stickers/dog.png" alt="Dog sticker">
+        <img class='stick-img' src="/public/image/stickers/cat.png" alt="Cat sticker">
+        <img class='stick-img' src="/public/image/stickers/bruce.png" alt="Bruce Lee sticker">
+        <img class='stick-img' src="/public/image/stickers/hercules.png" alt="Hercules sticker">
+        <img class='stick-img' src="/public/image/stickers/ufo.png" alt="UFO sticker">
+        <img class='stick-img' src="/public/image/stickers/elon.png" alt="Elon Musk sticker">
+        <img class='stick-img' src="/public/image/stickers/will.png" alt="Will Smith sticker">
     </div>
     <div class='bottom-container'>
         <div id='photos'></div>
@@ -47,7 +47,7 @@
         overflow-y: hidden;
     }
 
-    .makephoto-wrapper {
+    .photo-div {
         padding-top: 10px;
         display: flex;
         justify-content: center;
@@ -74,7 +74,7 @@
         display: none;
     }
 
-    #video-container {
+    #video-div {
         display: flex;
         flex-flow: column nowrap;
         justify-content: center;
@@ -112,7 +112,7 @@
         cursor: pointer;
     }
 
-    .stickers-wrapper
+    .stick-div
     {
         width: 200px;
         height: 550px;
@@ -121,42 +121,42 @@
         user-select: none;
     }
 
-    .stickers-wrapper img
+    .stick-div img
     {
         width: 175px;
         height: 175px;
     }
 
-    .stickers-wrapper img:hover {
+    .stick-div img:hover {
         border: 2px solid #00D5B6;
         border-radius: 10px;
         cursor: pointer;
     }
 
-    .stickers-wrapper::-webkit-scrollbar {
+    .stick-div::-webkit-scrollbar {
         width: 0.5em;
     }
 
-    .stickers-wrapper::-webkit-scrollbar-track {
+    .stick-div::-webkit-scrollbar-track {
         box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
         -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
         border-radius: 20px;
         border: 2px solid slategrey;
     }
 
-    .stickers-wrapper::-webkit-scrollbar-thumb {
+    .stick-div::-webkit-scrollbar-thumb {
         background-color: #00D5B6;
         outline: 1px solid slategrey;
         border-radius: 20px;
         border: 2px solid slategrey;
     }
 
-    .stickers-wrapper::-webkit-scrollbar-corner {
+    .stick-div::-webkit-scrollbar-corner {
         border-radius: 20px;
         border: 2px solid red;
     }
 
-    #sticker {
+    #stick {
         display: none;
         position: absolute;
         z-index: 100;
@@ -164,7 +164,7 @@
         left: 15%;
     }
 
-    #sticker img {
+    #stick img {
         width: 175px;
         height: 175px;
     }
@@ -182,13 +182,13 @@
         streaming = false
 
     // DOM Elements
-    const video = document.getElementById('video')
+    const video = document.getElementById('stream')
     const canvas = document.getElementById('canvas')
     const photos = document.getElementById('photos')
     const photoButton = document.getElementById('photo-but')
     const clearButton = document.getElementById('clear-but')
     const filters = document.getElementById('filters')
-    const stickers = document.getElementsByClassName('stickers-wrapper')[0]
+    const stickers = document.getElementsByClassName('stick-div')[0]
     const uploadButton = document.getElementById('upload-submit')
     const uploadFile = document.getElementById('upload-file')
 
@@ -282,7 +282,7 @@
         // Reset select list
         filters.selectedIndex = 0
         // Remove sticker from canvas
-        const stickerDivOnCanvas = document.getElementById('sticker')
+        const stickerDivOnCanvas = document.getElementById('stick')
         stickerDivOnCanvas.style.display = 'none'
     })
 
@@ -313,9 +313,9 @@
     }
 
     function sendRequest(imgUrl) {
-        const stickerDivOnCanvas = document.getElementById('sticker')
+        const stickerDivOnCanvas = document.getElementById('stick')
         const stickerImgOnCanvas = stickerDivOnCanvas.getElementsByTagName('img')[0]
-        let div = document.getElementsByClassName('makephoto-wrapper')
+        let div = document.getElementsByClassName('photo-div')
         let form = div[0].getElementsByTagName('form')
         let XHR = new XMLHttpRequest()
         let  formData = new FormData(form)
@@ -342,13 +342,13 @@
             imgTag.setAttribute('src', obj.path);
             photos.appendChild(imgTag)
         })
-        XHR.open("POST", 'photo/create/post');
+        XHR.open("POST", '/photo/create/snapshot-post');
         XHR.send(formData)
     }
 
     function addStickerToCanvas(e) {
-        if (e.target.className === 'sticker-img') {
-            const stickerDivOnCanvas = document.getElementById('sticker')
+        if (e.target.className === 'stick-img') {
+            const stickerDivOnCanvas = document.getElementById('stick')
             const stickerImgOnCanvas = stickerDivOnCanvas.getElementsByTagName('img')[0]
             stickerImgOnCanvas.src = e.target.src
             stickerDivOnCanvas.style.display = 'flex'

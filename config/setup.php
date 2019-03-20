@@ -40,6 +40,14 @@ try {
 	)";
     $db->exec($sql);
 
+    $sql = "CREATE TABLE photos (
+		id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		user_id INT(11) NOT NULL,
+		photo_path VARCHAR(254) NOT NULL,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	)";
+    $db->exec($sql);
+
     /**
      * Insert admin user to database.
      */

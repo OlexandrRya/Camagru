@@ -10,6 +10,7 @@
 
         'sign-up/create' => 'AuthController@createUser',
         'sign-up' => 'AuthController@signUp',
+        'confirm/success' => 'AuthController@successConfirm',
         'confirm' => 'AuthController@confirmUser',
         'success-register' => 'AuthController@successRegister',
 
@@ -18,7 +19,8 @@
         'settings/change/user-name' => 'UserController@changeUserName',
         'settings' => 'UserController@settingShow',
 
-        'photo/create/post' => 'PhotoController@photoCreatePost',
+        'photo/create/snapshot-post' => 'PhotoController@photoCreatePostSnapshotFile',
+        'photo/create/post' => 'PhotoController@photoCreatePostUploadFile',
         'photo/create/show' => 'PhotoController@photoShowCreatePage',
 
         'home' => 'HomeController@index',

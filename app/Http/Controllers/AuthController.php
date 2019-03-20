@@ -107,7 +107,7 @@ class AuthController
             $user = new User;
             $user->register($email, $userName, $password);
 
-            $this->sessionRepository->setArrayToSessionInJsonForm('user', $user);
+//            $this->sessionRepository->setArrayToSessionInJsonForm('user', $user);
             $this->verificationCodeRepository->createConfirmCodeAndSentConfirmEmailToUser($user);
 
             header("Location: /success-register");
@@ -130,7 +130,14 @@ class AuthController
             $this->userRepository->confirmUser($userId);
         }
 
-        header("Location: /login");
+        header("Location: /confirm/success");
+        return true;
+    }
+
+    public function successConfirm()
+    {
+        $contentPathBlade = "confirmSuccess.blade.php";
+        require_once(ROOT . '/view/general.blade.php');
         return true;
     }
 
