@@ -36,4 +36,21 @@ class Photo
             )
         );
     }
+
+    public function getAll()
+    {
+        $sql = "
+            SELECT * 
+            FROM `photos` 
+            WHERE 1
+            ORDER BY `photos`.created_at DESC;
+        ";
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(
+            array()
+        );
+        $photos = $sth->fetchAll();
+
+        return $photos;
+    }
 }

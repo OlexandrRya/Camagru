@@ -22,3 +22,8 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.img-gallery {
+    height: 100%;
+    width: 600px;
+}
