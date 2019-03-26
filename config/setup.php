@@ -26,6 +26,7 @@ try {
 		user_name VARCHAR(254) NOT NULL,
 		password VARCHAR(254) NOT NULL,
 		email VARCHAR(254),
+		informing_email_setting BOOLEAN NOT NULL DEFAULT TRUE,
 		is_verified BOOLEAN NOT NULL DEFAULT FALSE,
 		is_admin BOOLEAN NOT NULL DEFAULT FALSE
 	)";
@@ -44,6 +45,23 @@ try {
 		id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 		user_id INT(11) NOT NULL,
 		photo_path VARCHAR(254) NOT NULL,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	)";
+    $db->exec($sql);
+
+    $sql = "CREATE TABLE likes (
+		id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		user_id INT(11) NOT NULL,
+		photo_id INT(11) NOT NULL,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	)";
+    $db->exec($sql);
+
+    $sql = "CREATE TABLE comments (
+		id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		user_id INT(11) NOT NULL,
+		photo_id INT(11) NOT NULL,
+		text VARCHAR(254) NOT NULL,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	)";
     $db->exec($sql);

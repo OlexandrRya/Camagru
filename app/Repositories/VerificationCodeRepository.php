@@ -54,7 +54,7 @@ class VerificationCodeRepository
         ';
 
         $emailHeader = "Content-type: text/html; charset=".$encode." \r\n";
-        $emailHeader .= "From: Photo Creator <no-reply@camagru.com> \r\n";
+        $emailHeader .= "From: Camagru <no-reply@camagru.com> \r\n";
         $emailHeader .= "MIME-Version: 1.0 \r\n";
         $emailHeader .= "Content-Transfer-Encoding: 8bit \r\n";
         $emailHeader .= "Date: ".date("r (T)")." \r\n";

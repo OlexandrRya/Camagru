@@ -1,10 +1,19 @@
 @import url("signUp.css");
 
+.header {
+    z-index: 200;
+}
+.footer {
+    z-index: 200;
+}
 .mr-top-m {
     margin-top: 30px;
 }
 .mr-top-l {
     margin-top: 40px;
+}
+.mr-top-xl {
+    margin-top: 50px;
 }
 .text-center {
     text-align: center;
@@ -22,8 +31,43 @@
     display: flex;
     justify-content: flex-end;
 }
-
+.photo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 60px;
+    /*flex-direction: column;*/
+}
 .img-gallery {
     height: 100%;
     width: 600px;
+}
+.img-container {
+    border: 2px inset #009688;
+    display: flex;
+    flex-direction: column;
+}
+.info-likes-container {
+    display: flex;
+    justify-content: space-between;
+}
+.active-like {
+    color: #ff2600;
+}
+.control-block {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+}
+.comments-container {
+    margin-top: 10px;
+    display: none;
+    height: fit-content;
+    flex-flow: column;
+    justify-content: center;
+}
+.active-comments-container {
+    display: block;
+}
+.active-comment {
+    color: #00bfff;
 }

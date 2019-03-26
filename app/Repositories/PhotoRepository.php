@@ -62,8 +62,7 @@ class PhotoRepository
         if (is_file($stickerPath) && is_readable($stickerPath)) {
 
             $stickerImg = imagecreatefrompng($stickerPath);
-//            $stickerImg = imagescale($stickerImg, 175, 175);
-//            $size = getimagesize($stickerPath);
+
             imagecopy($finalImage, $stickerImg, 0, 0, -65, -120, 600, 450);
             imagedestroy($stickerImg);
         }
@@ -72,5 +71,10 @@ class PhotoRepository
     public function getAllPhoto()
     {
         return $this->photoModel->getAll();
+    }
+
+    public function removePhoto($userId, $photoId)
+    {
+        $this->photoModel->removePhoto($userId, $photoId);
     }
 }

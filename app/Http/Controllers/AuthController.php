@@ -107,7 +107,6 @@ class AuthController
             $user = new User;
             $user->register($email, $userName, $password);
 
-//            $this->sessionRepository->setArrayToSessionInJsonForm('user', $user);
             $this->verificationCodeRepository->createConfirmCodeAndSentConfirmEmailToUser($user);
 
             header("Location: /success-register");

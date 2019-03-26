@@ -3,6 +3,7 @@
      * @return array routes
      */
     return array(
+        'gallery' => 'HomeController@index',
         'setup' => 'SetupController@setup',
         'login/post' => 'AuthController@login',
         'login' => 'AuthController@getLogin',
@@ -22,6 +23,13 @@
         'photo/create/snapshot-post' => 'PhotoController@photoCreatePostSnapshotFile',
         'photo/create/post' => 'PhotoController@photoCreatePostUploadFile',
         'photo/create/show' => 'PhotoController@photoShowCreatePage',
+        'photo/remove' => 'PhotoController@removePhoto',
+
+        'like/create' => 'LikeController@createLike',
+        'like/remove' => 'LikeController@removeLike',
+
+        'comment/create' => 'CommentController@createComment',
+        'comment/remove' => 'CommentController@removeComment',
 
         'home' => 'HomeController@index',
         '' => 'HomeController@index'

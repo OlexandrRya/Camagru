@@ -53,4 +53,45 @@ class Photo
 
         return $photos;
     }
+
+    public static function checkUserPhoto($userId, $photoId)
+    {
+        $db = Db::getConnection();
+        $sql = "
+            SELECT id
+            FROM photos
+            WHERE `id` = :photoId AND `user_id` = :userId
+        ";
+        $sth = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(
+            array(
+                ':userId' => $userId,
+                ':photoId' => $photoId
+            )
+        );
+        $photo = $sth->fetchAll();
+        $photo = array_shift($photo);
+
+        if (isset($photo['id'])) {
+            return true;
+        }
+        return false;
+    }
+
+    public function removePhoto($userId, $photoId)
+    {
+        $sql = "
+            DELETE 
+            FROM photos
+            WHERE 
+              `id` = :photoId AND `user_id` = :userId;
+        ";
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(
+            array(
+                ':photoId' => $photoId,
+                ':userId' => $userId
+            )
+        );
+    }
 }

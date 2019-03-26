@@ -51,7 +51,7 @@
         padding-top: 10px;
         display: flex;
         justify-content: center;
-        flex-flow: nowrap;
+        flex-flow: wrap;
         width: 100%;
         height: 50%;
     }
@@ -69,7 +69,6 @@
         width: 500px;
     }
 
-
     #canvas {
         display: none;
     }
@@ -80,11 +79,12 @@
         justify-content: center;
         align-items: center;
         position: relative;
+        margin-bottom: 80px;
     }
 
     .photo-menu {
+        flex-flow: wrap;
         display: flex;
-        justify-content: space-around;
         align-items: center;
         height: 50px;
         width: 100%;
@@ -105,6 +105,8 @@
         outline: 0;
         height: 40px;
         white-space: nowrap;
+        width: auto;
+
     }
 
     #clear-but:hover, #photo-but:hover, #upload-file:hover, #upload-submit:hover {

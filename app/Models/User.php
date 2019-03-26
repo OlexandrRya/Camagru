@@ -11,6 +11,7 @@ class User
     public $name = NULL;
     public $email = NULL;
     public $isAdmin = 0;
+    public $isEmailInforming = 1;
 
     private $db;
 
@@ -82,6 +83,17 @@ class User
         $this->isAdmin = $user['is_admin'];
     }
 
+    public function loginWithUserIdWithoutPassword($userId)
+    {
+        $user = $this->getUserFromId($userId);
+
+        $this->id = $user['id'];
+        $this->name = $user['user_name'];
+        $this->email = $user['email'];
+        $this->isAdmin = $user['is_admin'];
+    }
+
+
     public function loginWithUserNameWithoutPassword($userName)
     {
         $user = $this->getUserFromUserName($userName);
@@ -102,6 +114,7 @@ class User
             $this->name = $user['user_name'];
             $this->email = $user['email'];
             $this->isAdmin = $user['is_admin'];
+            $this->isEmailInforming = $user['informing_email_setting'];
         }
     }
 
@@ -114,6 +127,20 @@ class User
         ";
         $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $sth->execute(array(':userName' => $userName));
+        $users = $sth->fetchAll();
+        $user = array_shift($users);
+        return $user;
+    }
+
+    private function getUserFromId($userId)
+    {
+        $sql = "
+            SELECT id, email, user_name, is_admin, password, informing_email_setting 
+            FROM `users` 
+            WHERE id = :userId;
+        ";
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array(':userId' => $userId));
         $users = $sth->fetchAll();
         $user = array_shift($users);
         return $user;
@@ -207,6 +234,21 @@ class User
     private function verifyPass($password, $passwordHash)
     {
         return password_verify($password, $passwordHash);
+    }
+
+    public static function getUserNameByUserId($userId)
+    {
+        $db = Db::getConnection();
+        $sql = "
+            SELECT user_name
+            FROM `users` 
+            WHERE id = :userId;
+        ";
+        $sth = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array(':userId' => $userId));
+        $users = $sth->fetchAll();
+        $user = array_shift($users);
+        return $user['user_name'];
     }
 
     public static function getUserInfoByUserName($userName)

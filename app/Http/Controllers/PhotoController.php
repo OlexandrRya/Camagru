@@ -103,4 +103,22 @@ class PhotoController
         }
         return true;
     }
+
+    public function removePhoto()
+    {
+        $errors = [];
+        $photoId = $_POST['photo_id'];
+        $userId = auth()->id;
+        $errors = array_filter($errors);
+
+        if (count($errors) == 0) {
+            $this->photoRepository->removePhoto($userId, $photoId);
+
+            echo 'success';
+            return true;
+        } else {
+            echo 'error';
+        }
+        return true;
+    }
 }
