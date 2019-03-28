@@ -89,7 +89,7 @@ class PhotoController
 
         if (count($errors) == 0) {
             if (isset($_FILES['file'])) {
-                if ($_FILES['file']['size'] != 0 and $_FILES['file']['size'] <= 10240000) {
+                if ($_FILES['file']['size'] != 0 && $_FILES['file']['size'] <= 10240000 && $_FILES['file']['type'] == 'image/png') {
                     move_uploaded_file($_FILES['file']['tmp_name'], ROOT . $uploadPath);
 
                     $this->photoRepository->savePhoto($uploadPath, auth()->id);
