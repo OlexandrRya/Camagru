@@ -28,7 +28,7 @@
                     <?php foreach( (array) App\Models\Comment::getCommentsFromPhoto($photo['id']) as $comment): ?>
                         <div class="comment">
                             <span class='user-name'><?php echo App\Models\User::getUserNameByUserId($comment['user_id']) ?>: </span>
-                            <span class='user-text'><?php echo $comment['text']; ?></span>
+                            <span class='user-text'><?php echo htmlspecialchars(strip_tags($comment['text'])); ?></span>
                         </div>
                     <?php endforeach; ?>
                 </div>
