@@ -39,8 +39,10 @@ class CommentController
 
         if (count($errors) == 0) {
             $this->commentRepository->createComment($userId, $photoId, $text);
-            $photo = $this->commentRepository->getPhoto($photoId);
+            $photo = $this->photoRepository->getPhotoFromId($photoId);
+
             $this->userRepository->informUserAboutComment($photo);
+
             echo json_encode(array('status' => 'success', 'text' => $text, 'user_name' => auth()->name));
             return true;
         } else {

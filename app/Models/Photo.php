@@ -94,4 +94,18 @@ class Photo
             )
         );
     }
+
+    public function getPhotoFromId($photoId)
+    {
+        $sql = "
+            SELECT *
+            FROM photos
+            WHERE `id` = :photoId;
+        ";
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array(':photoId' => $photoId));
+        $photos = $sth->fetchAll();
+        $photo = array_shift($photos);
+        return $photo;
+    }
 }

@@ -33,6 +33,28 @@ class UserController
         return true;
     }
 
+    public function changeEmailInforming()
+    {
+        $errors = [];
+        $isEmailInformingNew = isset($_POST['email_informing']) ? 1 : 0;
+        $userName = auth()->name;
+        $errors = array_filter($errors);
+
+        if (count($errors) == 0) {
+            $user = new User;
+            $user->loginWithUserNameWithoutPassword($userName);
+            $user->changeEmailInforming($isEmailInformingNew);
+
+            $_SESSION['user'] = json_encode($user);
+            header("Location: /settings");
+            return true;
+        } else {
+            $this->sessionRepository->setErrorMessages($errors);
+            header("Location: /settings");
+        }
+        return true;
+    }
+
     public function changeUserName()
     {
         $errors = [];

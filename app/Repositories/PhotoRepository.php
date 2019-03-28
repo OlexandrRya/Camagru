@@ -73,6 +73,11 @@ class PhotoRepository
         return $this->photoModel->getAll();
     }
 
+    public function getPhotoFromId($photoId)
+    {
+        return $this->photoModel->getPhotoFromId($photoId);
+    }
+
     public function removePhoto($userId, $photoId)
     {
         $this->photoModel->removePhoto($userId, $photoId);

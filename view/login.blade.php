@@ -15,5 +15,8 @@
         <div class="clearfix">
             <button type="submit" class="signupbtn">Login</button>
         </div>
+        <a href="/auth/forgot-password/show">
+            <p>Forgot password? Click here!</p>
+        </a>
     </div>
 </form>

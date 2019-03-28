@@ -20,6 +20,24 @@ class User
         $this->db = Db::getConnection();
     }
 
+    public function changeEmailInforming($isEmailInformingNew)
+    {
+        $sql = "
+            UPDATE `users`
+              SET informing_email_setting = :isEmailInformingNew
+            WHERE id = :id;
+        ";
+
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(
+            array(
+                ':isEmailInformingNew' => $isEmailInformingNew,
+                ':id' => $this->id
+            )
+        );
+        $this->isEmailInforming = $isEmailInformingNew;
+    }
+
     public function changePassword($newPassword)
     {
         $sql = "
@@ -121,7 +139,7 @@ class User
     private function getUserFromUserName($userName)
     {
         $sql = "
-            SELECT id, email, user_name, is_admin, password 
+            SELECT id, email, user_name, is_admin, password, informing_email_setting
             FROM `users` 
             WHERE user_name = :userName;
         ";
@@ -149,7 +167,7 @@ class User
     private function getUserFromEmail($email)
     {
         $sql = "
-            SELECT id, email, user_name, is_admin, password 
+            SELECT id, email, user_name, is_admin, password, informing_email_setting
             FROM `users` 
             WHERE email = :email;
         ";
@@ -324,11 +342,19 @@ class User
         return $error;
     }
 
+    public static function emailCheckEmail($email) {
+        $error = '';
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = 'Invalid email.';
+        }
+        return $error;
+    }
+
     public static function emailVerification($email) {
         $error = '';
         $user = User::getUserInfoByEmail($email);
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            var_dump(filter_var($email, FILTER_VALIDATE_EMAIL));
+            $error = 'Invalid email.';
         } else if (isset($user) && $user['is_verified'] == 1) {
             $error = "Email has already registered.";
         }

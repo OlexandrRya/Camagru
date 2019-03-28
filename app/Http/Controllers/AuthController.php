@@ -20,6 +20,105 @@ class AuthController
         $this->userRepository = new UserRepository();
     }
 
+    public function forgotPasswordShow()
+    {
+        $errors = $this->sessionRepository->getErrorMessagesInArray();
+
+        $contentPathBlade = "forgotPassword.blade.php";
+        require_once(ROOT . '/view/general.blade.php');
+
+        return true;
+    }
+
+    public function restoreSuccess()
+    {
+        $errors = $this->sessionRepository->getErrorMessagesInArray();
+
+        $contentPathBlade = "successRestore.blade.php";
+        require_once(ROOT . '/view/general.blade.php');
+
+        return true;
+    }
+
+    public function restorePassword()
+    {
+        $errors = [];
+        $confirmCode = $_POST['confirmCode'];
+        $password = $_POST['password'];
+        $repeatPassword = $_POST['repeat_password'];
+
+        $errors['password'] = User::passwordVerification($password, $repeatPassword);
+
+        $userId = $this->verificationCodeRepository->confirmCodeAndReturnUserId($confirmCode);
+        if (!$userId) {
+            $errors['verificationCodeError'] = 'Verification Code illiquid.';
+        }
+        $errors = array_filter($errors);
+
+        if (count($errors) == 0){
+            $user = new User();
+
+            $user->loginWithUserIdWithoutPassword($userId);
+            $user->changePassword($password);
+
+            header("Location: /auth/restore-password/success");
+            return true;
+        } else {
+            $this->sessionRepository->setErrorMessages($errors);
+        }
+
+        header("Location: /auth/restore-password/show?confirmCode=$confirmCode");
+        return true;
+    }
+
+    public function emailSendSuccess()
+    {
+        $errors = $this->sessionRepository->getErrorMessagesInArray();
+
+        $contentPathBlade = "emailSendSuccess.blade.php";
+        require_once(ROOT . '/view/general.blade.php');
+
+        return true;
+    }
+
+    public function restorePasswordShow()
+    {
+        $errors = $this->sessionRepository->getErrorMessagesInArray();
+
+        if (isset($_GET['confirmCode'])) {
+            $confirmCode = $_GET['confirmCode'];
+            $contentPathBlade = "restorePassword.blade.php";
+            require_once(ROOT . '/view/general.blade.php');
+        } else {
+            header("Location: /");
+        }
+
+        return true;
+    }
+
+    public function sendEmailRestorePassword()
+    {
+
+        $errors = [];
+        $email = $_POST['email'];
+
+        $errors['email'] = User::emailCheckEmail($email);
+        $errors = array_filter($errors);
+
+        if (count($errors) == 0) {
+
+            $this->verificationCodeRepository->createConfirmCodeAndSentRestorePasswordEmailToUser($email);
+
+            header("Location: /auth/restore-password/email/send/success");
+
+            return true;
+        } else {
+            $this->sessionRepository->setErrorMessages($errors);
+            header("Location: /auth/forgot-password/show");
+        }
+        return true;
+    }
+
     /**
      * Login area
      */

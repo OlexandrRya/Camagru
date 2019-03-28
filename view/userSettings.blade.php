@@ -62,3 +62,15 @@
         </div>
     </div>
 </form>
+
+<form class="mr-top-m" action="/settings/change/email-informing" method="POST" style="border:1px solid #ccc">
+    <div class="container">
+        <h3>Change email informing:</h3>
+        <hr>
+        <label for=""><b>Email informing setting:</b></label>
+        <input type="checkbox" value name="email_informing"   <?php echo auth()->isEmailInforming ? 'checked' : ''; ?>>
+        <div class="clearfix">
+            <button type="submit" class="signupbtn">Change</button>
+        </div>
+    </div>
+</form>
