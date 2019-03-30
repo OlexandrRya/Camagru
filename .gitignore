@@ -1,3 +1,4 @@
 .*
 !.gitignore
 !.htaccess
+public/uploads
