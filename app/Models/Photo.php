@@ -37,6 +37,43 @@ class Photo
         );
     }
 
+    public function getPhotoWithPaginate($page, $elementInPage)
+    {
+
+        $sql = "
+            SELECT * 
+            FROM `photos` 
+            ORDER BY `photos`.created_at DESC
+            LIMIT ?, ?;
+        ";
+        $param = ((int) $page * $elementInPage);
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->bindParam(1, $param, PDO::PARAM_INT);
+        $sth->bindParam(2, $elementInPage, PDO::PARAM_INT);
+        $sth->execute();
+        $photos = $sth->fetchAll();
+
+        return $photos;
+    }
+
+    public function countAllElement()
+    {
+        $sql = "
+            SELECT COUNT(id) as count_element
+            FROM `photos` 
+            WHERE 1
+        ";
+        $sth = $this->db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(
+            array()
+        );
+        $countElement = $sth->fetchAll();
+        $countElement = array_shift($countElement);
+
+        return isset($countElement['count_element'])? $countElement['count_element'] : 0;
+
+    }
+
     public function getAll()
     {
         $sql = "

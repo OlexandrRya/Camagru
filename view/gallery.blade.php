@@ -40,6 +40,10 @@
         </div>
     </div>
 <?php endforeach; ?>
-
+<div style="margin-bottom: 50px;">
+    <?php for($i = 0; $i <= $pageCount; $i++): ?>
+        <a href="?page=<?php echo $i; ?>"><?php echo $i; ?> </a>
+    <?php endfor; ?>
+</div>
 
 <script src="/public/js/gallery.js"></script>

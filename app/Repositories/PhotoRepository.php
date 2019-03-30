@@ -73,6 +73,18 @@ class PhotoRepository
         return $this->photoModel->getAll();
     }
 
+    public function getPageCount($elementInPage)
+    {
+        $countElement = $this->photoModel->countAllElement();
+
+        return (int) ($countElement / $elementInPage);
+    }
+
+    public function getPhotoWithPaginate($page, $elementInPage)
+    {
+        return $this->photoModel->getPhotoWithPaginate($page, $elementInPage);
+    }
+
     public function getPhotoFromId($photoId)
     {
         return $this->photoModel->getPhotoFromId($photoId);
